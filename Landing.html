@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Welcome - FOOD IS LIFE</title>
+  <link rel="stylesheet" href="Foodie.css">
+  <style>
+    .auth-container {
+      max-width: 420px;
+      margin: 3rem auto;
+      background: linear-gradient(135deg, #2e1b58, #ebedee);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+      padding: 2.5rem 2rem 2rem 2rem;
+      color: #fff;
+      text-align: center;
+    }
+    .auth-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 0.7rem 0;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      color: #fff;
+      border-bottom: 2px solid transparent;
+      transition: border 0.2s;
+      font-family: inherit;
+    }
+    .auth-tab.active {
+      border-bottom: 2.5px solid #ff5e3a;
+      color: #ffb88c;
+      font-weight: bold;
+    }
+    .auth-form {
+      display: none;
+      flex-direction: column;
+      gap: 1.2rem;
+      align-items: center;
+      margin-top: 1rem;
+    }
+    .auth-form.active {
+      display: flex;
+    }
+    .auth-form input {
+      width: 90%;
+      padding: 0.8rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.92);
+      color: #2c3e50;
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
+      margin-bottom: 0.5rem;
+    }
+    .auth-form input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #ff5e3a;
+    }
+    .auth-form button {
+      background: linear-gradient(90deg, #ff5e3a 60%, #ffb88c 100%);
+      color: #fff;
+      border: none;
+      padding: 0.9rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
+      transition: background 0.3s, transform 0.2s;
+      margin-top: 0.5rem;
+    }
+    .auth-form button:hover {
+      background: linear-gradient(90deg, #e04a2b 60%, #ffb88c 100%);
+      transform: translateY(-2px) scale(1.03);
+    }
+    .auth-message {
+      margin-top: 1rem;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #ffb88c;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>FOOD IS LIFE</h1>
+    <nav>
+      <a href="#" class="active">Sign In / Register</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="auth-container">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="signInTab">Sign In</button>
+        <button class="auth-tab" id="registerTab">Register</button>
+      </div>
+      <!-- Sign In Form -->
+      <form id="signInForm" class="auth-form active" autocomplete="off">
+        <input type="text" id="signInUsername" placeholder="Username" required />
+        <input type="password" id="signInPassword" placeholder="Password" required />
+        <button type="submit">Sign In</button>
+        <div class="auth-message" id="signInMessage"></div>
+      </form>
+      <!-- Register Form -->
+      <form id="registerForm" class="auth-form" autocomplete="off">
+        <input type="text" id="registerUsername" placeholder="Choose Username" required />
+        <input type="password" id="registerPassword" placeholder="Choose Password" required />
+        <button type="submit">Register</button>
+        <div class="auth-message" id="registerMessage"></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Tab switching
+    const signInTab = document.getElementById('signInTab');
+    const registerTab = document.getElementById('registerTab');
+    const signInForm = document.getElementById('signInForm');
+    const registerForm = document.getElementById('registerForm');
+
+    signInTab.onclick = () => {
+      signInTab.classList.add('active');
+      registerTab.classList.remove('active');
+      signInForm.classList.add('active');
+      registerForm.classList.remove('active');
+    };
+    registerTab.onclick = () => {
+      registerTab.classList.add('active');
+      signInTab.classList.remove('active');
+      registerForm.classList.add('active');
+      signInForm.classList.remove('active');
+    };
+
+    // Registration logic
+    registerForm.onsubmit = function(e) {
+      e.preventDefault();
+      const username = document.getElementById('registerUsername').value.trim();
+      const password = document.getElementById('registerPassword').value.trim();
+      const message = document.getElementById('registerMessage');
+      let users = JSON.parse(localStorage.getItem('users')) || [];
+      if (users.some(u => u.username === username)) {
+        message.textContent = "Username already exists!";
+        return;
+      }
+      users.push({ username, password });
+      localStorage.setItem('users', JSON.stringify(users));
+      localStorage.setItem('currentUser', username);
+      message.style.color = "#2ecc71";
+      message.textContent = "Registration successful! Redirecting...";
+      setTimeout(() => window.location.href = "Homepage.html", 1200);
+    };
+
+    // Sign In logic
+    signInForm.onsubmit = function(e) {
+      e.preventDefault();
+      const username = document.getElementById('signInUsername').value.trim();
+      const password = document.getElementById('signInPassword').value.trim();
+      const message = document.getElementById('signInMessage');
+      let users = JSON.parse(localStorage.getItem('users')) || [];
+      const user = users.find(u => u.username === username && u.password === password);
+      if (!user) {
+        message.textContent = "Invalid username or password!";
+        return;
+      }
+      localStorage.setItem('currentUser', username);
+      message.style.color = "#2ecc71";
+      message.textContent = "Sign in successful! Redirecting...";
+      setTimeout(() => window.location.href = "Homepage.html", 1200);
+    };
+  </script>
+</body>
+</html>

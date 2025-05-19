@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Rate Us - Food Is Life</title>
+  <link rel="stylesheet" href="Foodie.css">
+</head>
+<body>
+  <header>
+    <h1>FOOD IS LIFE</h1>
+    <nav>
+      <a href="Homepage.html">Home</a>
+      <a href="#rate" class="active">Rate Us</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <main>
+      <section class="hero">
+        <h2>We Value Your Feedback!</h2>
+        <p>How would you rate your experience with us?</p>
+      </section>
+
+      <section id="rate" class="rate-section">
+        <form id="ratingForm" class="rating-form">
+          <div class="star-rating">
+            <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars">&#9733;</label>
+            <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars">&#9733;</label>
+            <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars">&#9733;</label>
+            <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars">&#9733;</label>
+            <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star">&#9733;</label>
+          </div>
+          <textarea id="ratingComment" placeholder="Leave a comment (optional)"></textarea>
+          <button type="submit">Submit Rating</button>
+        </form>
+        <div id="ratingMessage"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Rating form logic
+    const ratingForm = document.getElementById('ratingForm');
+    const ratingMessage = document.getElementById('ratingMessage');
+
+    ratingForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const rating = document.querySelector('input[name="rating"]:checked');
+      const comment = document.getElementById('ratingComment').value.trim();
+
+      if (!rating) {
+        ratingMessage.textContent = "Please select a star rating.";
+        ratingMessage.style.color = "#ff5e3a";
+        return;
+      }
+
+      ratingMessage.textContent = "Thank you for your feedback!";
+      ratingMessage.style.color = "#2c3e50";
+      ratingForm.reset();
+    });
+  </script>
+</body>
+</html>
