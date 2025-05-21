@@ -130,14 +130,13 @@ button:hover {
   background: #e04a2b;
 }
 
+/* Modal Styles */
 .modal {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(44,62,80,0.45);
   justify-content: center;
   align-items: center;
 }
@@ -147,18 +146,61 @@ button:hover {
 }
 
 .modal-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem 2rem 1.5rem 2rem;
+  max-width: 350px;
+  width: 90%;
   text-align: center;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(44,62,80,0.18);
 }
 
 .close-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 12px;
+  right: 18px;
+  font-size: 2rem;
+  color: #ff5e3a;
   cursor: pointer;
-  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.modal-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.modal-content h4 {
+  margin: 0.5rem 0 0.2rem 0;
+  color: #2c3e50;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.modal-content p {
+  color: #7f8c8d;
+  margin-bottom: 0.7rem;
+}
+
+#modalOrderBtn {
+  background: #ff5e3a;
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+#modalOrderBtn:hover {
+  background: #e04a2b;
+  transform: scale(1.05);
 }
 
 #create-account {
