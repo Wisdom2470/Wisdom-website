@@ -5,6 +5,90 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Rate Us - Food Is Life</title>
   <link rel="stylesheet" href="Foodie.css">
+  <!-- Add Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body, .rating-section, .rating-section textarea, .rating-section button, .rating-section h2, .rating-section p {
+      font-family: 'Poppins', Arial, sans-serif;
+    }
+    .rating-stars {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .rating-stars input[type="radio"] {
+      display: none;
+    }
+    .rating-stars label {
+      font-size: 2.5rem;
+      color: #ccc;
+      cursor: pointer;
+      transition: color 0.2s;
+      padding: 0 2px;
+    }
+    .rating-stars input[type="radio"]:checked ~ label,
+    .rating-stars label:hover,
+    .rating-stars label:hover ~ label {
+      color: #FFD700;
+    }
+    .rating-section {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .rating-section textarea {
+      width: 100%;
+      min-height: 60px;
+      border-radius: 8px;
+      border: 1.5px solid #ff5722;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 1.08rem;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: #fafafa;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 4px rgba(255,87,34,0.05);
+      outline: none;
+    }
+    .rating-section textarea:focus {
+      border-color: #e64a19;
+      box-shadow: 0 2px 8px rgba(255,87,34,0.10);
+      background: #fff;
+    }
+    .rating-section button {
+      margin-top: 16px;
+      padding: 10px 28px;
+      background: #ff5722;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-family: 'Poppins', Arial, sans-serif;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(255,87,34,0.08);
+    }
+    .rating-section button:hover {
+      background: #e64a19;
+      box-shadow: 0 4px 16px rgba(255,87,34,0.15);
+    }
+    .rating-section h2 {
+      font-weight: 600;
+      font-size: 2rem;
+      margin-bottom: 0.5em;
+      color: #ff5722;
+    }
+    .rating-section p {
+      font-size: 1.08rem;
+      color: #444;
+      margin-bottom: 1.5em;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -23,43 +107,66 @@
         <p>How would you rate your experience with us?</p>
       </section>
 
-      <section id="rate" class="rate-section">
-        <form id="ratingForm" class="rating-form">
-          <div class="star-rating">
-            <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars">&#9733;</label>
-            <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars">&#9733;</label>
-            <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars">&#9733;</label>
-            <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars">&#9733;</label>
-            <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star">&#9733;</label>
+      <!-- Rating Form with Stars -->
+      <section id="rate" class="rating-section">
+        <form id="ratingForm">
+          <div class="rating-stars">
+            <input type="radio" id="star5" name="rating" value="5" /><label for="star5">&#9733;</label>
+            <input type="radio" id="star4" name="rating" value="4" /><label for="star4">&#9733;</label>
+            <input type="radio" id="star3" name="rating" value="3" /><label for="star3">&#9733;</label>
+            <input type="radio" id="star2" name="rating" value="2" /><label for="star2">&#9733;</label>
+            <input type="radio" id="star1" name="rating" value="1" /><label for="star1">&#9733;</label>
           </div>
           <textarea id="ratingComment" placeholder="Leave a comment (optional)"></textarea>
+          <br>
           <button type="submit">Submit Rating</button>
         </form>
-        <div id="ratingMessage"></div>
       </section>
     </main>
   </div>
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script>
-    // Rating form logic
-    const ratingForm = document.getElementById('ratingForm');
-    const ratingMessage = document.getElementById('ratingMessage');
+    const firebaseConfig = {
+      apiKey: "AIzaSyBO69Q8QJ3v6R5VEvCGX2zInHqPU6Jgb2Y",
+      authDomain: "foodies-2050d.firebaseapp.com",
+      databaseURL: "https://foodies-2050d-default-rtdb.firebaseio.com",
+      projectId: "foodies-2050d",
+      storageBucket: "foodies-2050d.appspot.com",
+      messagingSenderId: "1050528513499",
+      appId: "1:1050528513499:web:f850a0a3864d0a0c2bfbfe",
+      measurementId: "G-2PVD8YPYHK"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-    ratingForm.addEventListener('submit', function(e) {
+    // Save rating function
+    function saveRating(rating) {
+      db.ref('ratings').push(rating)
+        .then(() => {
+          alert('Thank you for your rating!');
+          document.getElementById('ratingForm').reset();
+        })
+        .catch(err => alert('Error: ' + err.message));
+    }
+
+    // Rating form handler
+    document.getElementById('ratingForm').onsubmit = function(e) {
       e.preventDefault();
-      const rating = document.querySelector('input[name="rating"]:checked');
-      const comment = document.getElementById('ratingComment').value.trim();
-
-      if (!rating) {
-        ratingMessage.textContent = "Please select a star rating.";
-        ratingMessage.style.color = "#ff5e3a";
+      const ratingValue = document.querySelector('input[name="rating"]:checked');
+      if (!ratingValue) {
+        alert('Please select a star rating.');
         return;
       }
-
-      ratingMessage.textContent = "Thank you for your feedback!";
-      ratingMessage.style.color = "#2c3e50";
-      ratingForm.reset();
-    });
+      const ratingData = {
+        rating: ratingValue.value,
+        comment: document.getElementById('ratingComment').value,
+        time: new Date().toISOString()
+      };
+      saveRating(ratingData);
+    };
   </script>
 </body>
 </html>
