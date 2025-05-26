@@ -59,5 +59,52 @@
   </div>
 
   <script src="homepage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBO69Q8QJ3v6R5VEvCGX2zInHqPU6Jgb2Y",
+      authDomain: "foodies-2050d.firebaseapp.com",
+      databaseURL: "https://foodies-2050d-default-rtdb.firebaseio.com",
+      projectId: "foodies-2050d",
+      storageBucket: "foodies-2050d.appspot.com",
+      messagingSenderId: "1050528513499",
+      appId: "1:1050528513499:web:f850a0a3864d0a0c2bfbfe",
+      measurementId: "G-2PVD8YPYHK"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Contact form handler
+    document.getElementById('contactForm').onsubmit = function(e) {
+      e.preventDefault();
+      const contactData = {
+        name: document.getElementById('contactName').value,
+        email: document.getElementById('contactEmail').value,
+        message: document.getElementById('contactMessage').value,
+        time: new Date().toISOString()
+      };
+      db.ref('contacts').push(contactData)
+        .then(() => {
+          alert('Message sent! Thank you.');
+          document.getElementById('contactForm').reset();
+        })
+        .catch(err => alert('Error: ' + err.message));
+    };
+
+    // Save order function
+    function saveOrder(order) {
+      db.ref('orders').push(order)
+        .then(() => alert('Order saved!'))
+        .catch(err => alert('Error: ' + err.message));
+    }
+
+    // Save rating function
+    function saveRating(rating) {
+      db.ref('ratings').push(rating)
+        .then(() => alert('Thank you for your rating!'))
+        .catch(err => alert('Error: ' + err.message));
+    }
+  </script>
 </body>
 </html>
